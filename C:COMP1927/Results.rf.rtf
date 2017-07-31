@@ -1,0 +1,163 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf820
+{\fonttbl\f0\fnil\fcharset0 AndaleMono;\f1\fnil\fcharset0 Monaco;\f2\fmodern\fcharset0 Courier-Bold;
+}
+{\colortbl;\red255\green255\blue255;\red255\green255\blue255;\red0\green0\blue0;\red0\green0\blue0;
+\red234\green233\blue255;\red242\green242\blue242;}
+{\*\expandedcolortbl;;\csgenericrgb\c100000\c100000\c100000;\csgray\c0\c85000;\cssrgb\c0\c0\c0;
+\cssrgb\c93333\c93333\c100000;\csgray\c95825;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww25260\viewh13240\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs26 \cf0 a.\
+\expnd0\expndtw0\kerning0
+The mkwords 1000000 command produces 857144 distinct words. \
+What is the maximum chain length if a hash table size of 85711 is used? \
+How does the chain length distribution change if the hash table size is 100000? 214283? 400000? 400837? 857144? 857137?\
+\
+
+\fs22 Hash Table Size |	Min Chain Length 	|Max Chain Length	|Max # of Chains |Length\
+	85711			  1				   27		     10985          10\
+	10000			  1				   143		     321            80\
+	214283			  0				   15		     41614          3\
+	400000			  0				   15		     102686         2\
+	400837			  0				   11		     108595         2\
+	857144			  0				   9			     317732         0\
+	857137			  0				   8			     315778         0\
+\
+Maximum chain length of hash table size of 85711: 27\
+The maximum change length decreases as the Hash Table size increases, which makes sense in  a way. \
+\
+
+\fs26 b. Every other number above (i.e. 85711, 214283, 400837, 857137) is prime. It is often noted that using prime numbers appropriately in the hash function leads to a better distribution of hash values, and thus generally shorter chains. \
+Does this appear to be the case for the hash table sizes in the previous question?\
+\
+
+\fs22 Yes indeed, a wise choice. Prime numbers improve, the main chain length and also in this case. As you look at the last two values, The max chain length value is decreased when using a prime number.\
+\
+
+\fs26 c. \
+An "optimal" hash table would have all slots occupied and have all chains of length roughly (nwords/nslots). In practice, this is impossible to achieve in the general case, and what we want is a table with relatively short chains, with as few slots as possible (small size of hash table), and not too many empty slots. \
+Can you find a suitable hash table size that keeps the maximum chain length under 10, and has most chains with length 1 or 2, but also uses more than 2/3 of the slots?
+\fs22 \
+\
+ \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs20 \cf2 \cb3 \kerning1\expnd0\expndtw0 \CocoaLigature0 ./mkwords 1000000 | ./words - 558998\
+Reading words from stdin\
+Hash Table Stats:\
+Number of slots = 558998\
+Number of items = 857144\
+Chain length distribution\
+  Length  #Chains\
+       0   121686\
+       1   184090\
+       2   141421\
+       3    72204\
+       4    27986\
+       5     8745\
+       6     2269\
+       7      475\
+       8      106\
+       9       16
+\f0\fs22 \cf0 \cb1 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \
+Slots used: 78% roughly\
+By inputting 558998 words, it satisfied all the criteria above.\
+\
+d. \
+Compare both the outputs and the profiles for the two commands:\
+\pard\pardeftab720\partightenfactor0
+\cf0 What does this tell you about has table search performance when the has function is significantly sub-optimal?\
+\
+The 1st output, produced an extremely long length spanning from 1 - 4479, with chains being more equally distributed. The second output produced a significantly shorter length range from 0 - 20 only, with more chains of n length being more clustered together. It also showed me that the 2nd output was outputted significantly faster than the 1st output during runtime.\
+\
+1st OUTPUT USES A NON PRIME NUMBER\
+2nd OUTPUT USES A PRIME NUMBER. THEY WAS RIGHT PRIME NUMBER IS ACTUALLY BETTER AND MORE EFFICIENT. THIS IS BECAUSE IT AVOIDS CLUSTERING OF FUKN NUMBERS.\
+\
+e.\
+Examine the profiles from running the command:\
+for a number of different values of N What are the most costly functions (in terms of overall time)?\
+\
+The most costly time function was when N was extremely small compared to number of items. The larger N was the better the run time was. This is because N denotes the number of slots available to input the items into, if there are less slots available, then more elements are hashed into the same key, thus it takes more time to calculate, hence increasing runtime. \
+\
+\
+f. \
+Suggest how the individual functions might be improved. Suggest how the overall performance might be improved. \
+\
+Getting rid of the search in the insertion function f will improve the overall performance, This is because then it won\'92t need to search through the entire link list and compare each time which is O(n) time. \
+\
+g. \
+Implement your suggestions and then give a new profile to show the improvement, and explain how the profile shows the improvement.\
+\
+OLD PROFILE\
+\
+\pard\pardeftab720\sl340\partightenfactor0
+
+\f2\b\fs29\fsmilli14667 \cf4 \cb5 ./mkwords 100000 | ./words - 50033
+\f0\b0\fs22 \cf0 \cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs20 \cf6 \cb3 \kerning1\expnd0\expndtw0 \CocoaLigature0 Flat profile:\
+\
+Each sample counts as 0.01 seconds.\
+  %   cumulative   self              self     total           \
+ time   seconds   seconds    calls  ns/call  ns/call  name    \
+ 60.00      0.06     0.06   200004   299.99   299.99  hash\
+ 20.00      0.08     0.02    90893   220.04   220.04  ListInsert\
+ 10.00      0.09     0.01   100000   100.00   624.99  HashTableInsert\
+  5.00      0.10     0.01   200004    25.00    25.00  ListSearch\
+  5.00      0.10     0.01                             ListDelete\
+  0.00      0.10     0.00   378442     0.00     0.00  cmp\
+  0.00      0.10     0.00   100004     0.00   324.99  HashTableSearch\
+  0.00      0.10     0.00   100001     0.00     0.00  ItemGet\
+  0.00      0.10     0.00   100000     0.00     0.00  newItem\
+  0.00      0.10     0.00    90893     0.00     0.00  dropItem\
+  0.00      0.10     0.00    50033     0.00     0.00  ListLength\
+  0.00      0.10     0.00    50033     0.00     0.00  dropList\
+  0.00      0.10     0.00    50033     0.00     0.00  newList\
+  0.00      0.10     0.00        1     0.00     0.00  HashTableStats\
+  0.00      0.10     0.00        1     0.00     0.00  dropHashTable\
+  0.00      0.10     0.00        1     0.00     0.00  newHashTable\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs22 \cf0 \cb1 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+NEW PROFILE\
+\
+\pard\pardeftab720\sl340\partightenfactor0
+
+\f2\b\fs29\fsmilli14667 \cf4 \cb5 ./mkwords 100000 | ./words - 50033
+\f1\b0\fs20 \cf6 \cb3 \kerning1\expnd0\expndtw0 \CocoaLigature0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0\fs22 \cf0 \cb1 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs20 \cf6 \cb3 \kerning1\expnd0\expndtw0 \CocoaLigature0 Each sample counts as 0.01 seconds.\
+  %   cumulative   self              self     total           \
+ time   seconds   seconds    calls  ms/call  ms/call  name    \
+ 40.00      0.02     0.02   100004     0.00     0.00  ListSearch\
+ 20.00      0.03     0.01   200004     0.00     0.00  hash\
+ 20.00      0.04     0.01    50033     0.00     0.00  ListLength\
+ 20.00      0.05     0.01    50033     0.00     0.00  dropList\
+  0.00      0.05     0.00   292236     0.00     0.00  cmp\
+  0.00      0.05     0.00   100004     0.00     0.00  HashTableSearch\
+  0.00      0.05     0.00   100001     0.00     0.00  ItemGet\
+  0.00      0.05     0.00   100000     0.00     0.00  HashTableInsert\
+  0.00      0.05     0.00   100000     0.00     0.00  ListInsert\
+  0.00      0.05     0.00   100000     0.00     0.00  dropItem\
+  0.00      0.05     0.00   100000     0.00     0.00  newItem\
+  0.00      0.05     0.00    50033     0.00     0.00  newList\
+  0.00      0.05     0.00        1     0.00    10.00  HashTableStats\
+  0.00      0.05     0.00        1     0.00    10.00  dropHashTable\
+  0.00      0.05     0.00        1     0.00     0.00  newHashTable\
+\
+\
+By getting rid of the search call in the insertion function, we are able reduce the time significantly, this is because it does not need to traverse through the link list which has a time complexity of o(n) (depending how long the link list is ). \
+}
